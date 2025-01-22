@@ -1,9 +1,22 @@
 
 // /albums/tracks/
 // a route from album? 
+
+// or create actual objects? 
+// function Track(number, title, duration, primaryArtist) {
+//   this.number = number;
+//   this.title = title; 
+//   this.duration = duration;
+//   this.primaryArtist = primaryArtist;
+// }
+
 let albums = [
-  { name: "a1", yearReleased: 1970, genre: 'pop' }, // , tracks = []
-  { name: "a2", yearReleased: 1960, genre: 'rock'}
+  { id: 1, name: "a1", yearReleased: 1970, genre: 'pop', tracks: [ { number: 1, title: "track1",  duration: 120, primaryArtist: "a1"}, 
+  { number: 2, title: "track2",  duration: 100, primaryArtist: "a2"} ] }, 
+
+  { id: 2, name: "a2", yearReleased: 1960, genre: 'rock', tracks: [ { number: 3, title: "track3",  duration: 90, primaryArtist: "a3"}, 
+  { number: 4, title: "track4",  duration: 120, primaryArtist: "a4"}, 
+  { number: 5, title: "track5",  duration: 100, primaryArtist: "a5"} ] }
 ];
 
 module.exports = function(app) {
@@ -16,6 +29,7 @@ module.exports = function(app) {
     response.status(200).send(albums); // 200 necessary?
   }
 
+  // change to check for id??
   function addAlbum(request, response) {
     // 1. get parameters, headers, query string, and/or body out of request
     let nameInput = request.body.name;
@@ -59,8 +73,36 @@ module.exports = function(app) {
     response.status(200).send(foundAlbum);
   }
 
+  // id or name? 
+  function addTrackToAlbum(request, response) {
+    const albumIdInput = request.body.albumId;
+    const numberInput = request.body.number;
+    const titleInput = request.body.title;
+    const durationInput = request.body.duration;
+    const primaryArtistInput = request.body.primaryArtist;
+
+    if (!numberInput || !titleInput || !durationInput || !primaryArtistInput) {
+      response.sendStatus(400);
+      return;
+    }
+
+    const foundAlbum = albums.find(album => {
+      return album.id == albumIdInput;
+    });
+    if (!foundAlbum) {
+      response.sendStatus(400);
+      return;
+    }
+
+    const newTrack = { number: numberInput, title: titleInput, duration: durationInput, primaryArtist: primaryArtistInput };
+    foundAlbum.tracks.push(newTrack);
+
+    response.status(200).send(foundAlbum);
+  }
+
   app.get('/album/list', listAlbums);
   app.post('/album/add', addAlbum);
   app.get('/album/get', getAlbumDetails);
+  app.post('/album/addTrack', addTrackToAlbum);
   
 };

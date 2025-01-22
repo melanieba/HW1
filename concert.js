@@ -48,7 +48,7 @@ module.exports = function(app) {
       return concert.id = idInput;
     });
     if (!foundConcert) {
-      response.sendStatus(400);
+      response.sendStatus(400); // testtest
       return;
     }
 
