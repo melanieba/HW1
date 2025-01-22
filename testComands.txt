@@ -1,0 +1,41 @@
+
+// album
+
+// list
+curl http://localhost:3000/album/list
+
+// add
+curl --data "name=a3&yearReleased=1980&genre=g3" http://localhost:3000/album/add
+// add without name, should fail
+curl --data "yearReleased=1980&genre=g3" http://localhost:3000/album/add
+
+// get
+curl "http://localhost:3000/album/get?name=a2"
+// get album that doesn't exist, should fail
+curl "http://localhost:3000/album/get?name=aaaaa"
+
+
+
+// artist
+
+// list
+curl http://localhost:3000/artist/list
+
+// add
+curl --data "name=artist3&biography=ksjdfhkj+jsdkhf&socialMediaLink=http://instagram.com" http://localhost:3000/artist/add
+
+// update artist name
+curl -X PATCH --data "name=artist2&nameToChangeTo=ARTIST10" http://localhost:3000/artist/update
+
+
+
+// concerts
+
+// list all for testing
+curl http://localhost:3000/concert/listAll
+
+// list valid concerts
+curl http://localhost:3000/concert/list?minStartDate=2025-04-01&maxStartDate=2025-06-01
+
+// changeConcertStartDate
+curl -X PATCH --data "id=1&startDate='2025-05-15'" http://localhost:3000/concert/update
