@@ -12,22 +12,18 @@ module.exports = function(app) {
 
   // List all concerts within a time range (minimum and maximum start time/date)
   function listConcerts(request, response) {
-    const minStartDateInput = request.query.minDateTime;
-    const maxStartDateInput = request.query.maxDateTime;
-
-    console.log("check")
-
-    // add functionality for if only min is given or only max is given? 
-    if (!minStartDateInput || !maxStartDateInput) {
-      response.sendStatus(400);
-      return;
-    }
+    const minStartDateInput = request.query.minStartDate;
+    const maxStartDateInput = request.query.maxStartDate;
 
     const minDateToCheck = new Date(minStartDateInput);
     const maxDateToCheck = new Date(maxStartDateInput);
 
-    console.log(minDateToCheck);
-    console.log(maxDateToCheck);
+    // checks if the date passed was in the correct format
+    // combines checks for if both exist
+    if (isNaN(minDateToCheck) || isNaN(maxDateToCheck)) {
+      response.sendStatus(400);
+      return;
+    }
 
     let validConcerts = [];
 
@@ -40,7 +36,6 @@ module.exports = function(app) {
     response.status(200).send(validConcerts);
   }
 
-  // Change the start date/time of a specific concert
   function changeConcertStartDate(request, response) {
     let idInput = request.body.id;
     
@@ -48,7 +43,7 @@ module.exports = function(app) {
       return concert.id = idInput;
     });
     if (!foundConcert) {
-      response.sendStatus(400); // testtest
+      response.sendStatus(400); 
       return;
     }
 

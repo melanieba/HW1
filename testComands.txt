@@ -10,12 +10,15 @@ curl --data "name=a3&yearReleased=1980&genre=g3" http://localhost:3000/album/add
 curl --data "yearReleased=1980&genre=g3" http://localhost:3000/album/add
 
 // get
-curl "http://localhost:3000/album/get?name=a2"
+curl "http://localhost:3000/album/get?id=1"
 // get album that doesn't exist, should fail
-curl "http://localhost:3000/album/get?name=aaaaa"
+curl "http://localhost:3000/album/get?id=30"
 
 // add track to album
 curl --data "albumId=1&number=10&title=t10&duration=90&primaryArtist=a10" http://localhost:3000/album/addTrack
+
+// delete album
+curl -X PATCH --data "albumId=1&trackTitle=track1" http://localhost:3000/album/deleteTrack
 
 
 // artist
@@ -37,7 +40,10 @@ curl -X PATCH --data "name=artist2&nameToChangeTo=ARTIST10" http://localhost:300
 curl http://localhost:3000/concert/listAll
 
 // list valid concerts
-curl http://localhost:3000/concert/list?minStartDate=2025-04-01&maxStartDate=2025-06-01
+curl "http://localhost:3000/concert/list?minStartDate=2025-04-01&maxStartDate=2025-06-01"
+// wrong date format, should fail
+curl http://localhost:3000/concert/list?minStartDate=THIS_IS_WRONG_FORMAT&maxStartDate=2025-06-01
 
 // changeConcertStartDate
 curl -X PATCH --data "id=1&startDate='2025-05-15'" http://localhost:3000/concert/update
+

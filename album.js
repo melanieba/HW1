@@ -52,17 +52,17 @@ module.exports = function(app) {
 
   function getAlbumDetails(request, response) {
     // 1. get parameters, headers, query string, and/or body out of request
-    let nameInput = request.query.name;
+    let idInput = request.query.id;
 
     // 2. validate inputs
-    if (!nameInput) {
+    if (!idInput) {
       response.sendStatus(400);
       return;
     }
 
     // 3. do the thing (i.e. interact with model layer to fulfill request)
     const foundAlbum = albums.find(album => {
-      return album.name == nameInput;
+      return album.id == idInput;
     });
     if (!foundAlbum) {
       response.sendStatus(400);
@@ -73,23 +73,68 @@ module.exports = function(app) {
     response.status(200).send(foundAlbum);
   }
 
-  // id or name? 
-  function addTrackToAlbum(request, response) {
-    const albumIdInput = request.body.albumId;
-    const numberInput = request.body.number;
-    const titleInput = request.body.title;
-    const durationInput = request.body.duration;
-    const primaryArtistInput = request.body.primaryArtist;
+  function deleteAlbum(request, response) {
+    let idInput = request.query.id;
+
+    if (!idInput) {
+      response.sendStatus(400);
+      return;
+    }
+
+    const foundAlbum = albums.find(album => {
+      return album.id == idInput;
+    });
+    if (!foundAlbum) {
+      response.sendStatus(400);
+      return;
+    }
+
+    albums = albums.filter(album => {
+      return album.id != idInput;
+    });
+    albumTracks = albumTracks.filter(album => {
+      return album.id != idInput;
+    });
+
+    response.status(200).send(foundAlbum);
+  }
+
+  function listAlbumTracks(request, response) {
+    let idInput = request.query.id;
+
+    if (!idInput) {
+      response.sendStatus(400);
+      return;
+    }
+
+    const foundAlbumTracks = albumTracks.find(album => {
+      return album.id == idInput;
+    });
+    if (!foundAlbumTracks) {
+      response.sendStatus(400);
+      return;
+    }
+
+    response.status(200).send(foundAlbumTracks.tracks);
+  }
+
+  function addAlbumTrack(request, response) {
+    let albumIdInput = request.body.albumId;
+
+    let numberInput = request.body.number;
+    let titleInput = request.body.title;
+    let durationInput = request.body.duration;
+    let primaryArtistInput = request.body.primaryArtist;
 
     if (!numberInput || !titleInput || !durationInput || !primaryArtistInput) {
       response.sendStatus(400);
       return;
     }
 
-    const foundAlbum = albums.find(album => {
+    const foundAlbumTracks = albumTracks.find(album => {
       return album.id == albumIdInput;
     });
-    if (!foundAlbum) {
+    if (!foundAlbumTracks) {
       response.sendStatus(400);
       return;
     }
@@ -100,9 +145,34 @@ module.exports = function(app) {
     response.status(200).send(foundAlbum);
   }
 
-  app.get('/album/list', listAlbums);
+  function deleteTrack(request, response) {
+    const albumIdInput = request.body.albumId;
+    const trackNumberInput = request.body.trackNumber;
+
+    const foundAlbum = albums.find(album => {
+      return album.id == albumIdInput;
+    });
+    if (!foundAlbum) {
+      response.sendStatus(400);
+      return;
+    }
+
+    for (let i = 0; i < foundAlbum.tracks.length; i++) { //tbd find where i didnt do ===
+      if (foundAlbum.tracks[i] === trackNumberInput) {
+        albums.tracks.splice(i, 1);
+        break;
+      }
+    }
+
+    response.status(200).send(foundAlbum);
+  }
+
+  app.get('/album/list', listAlbums); 
   app.post('/album/add', addAlbum);
   app.get('/album/get', getAlbumDetails);
-  app.post('/album/addTrack', addTrackToAlbum);
-  
+  app.delete('/album/delete', deleteAlbum);
+
+  app.post('/album/track/add', addAlbumTrack);
+  app.get('/album/track/list', listAlbumTracks);
+  app.delete('/album/track/delete', deleteTrack);
 };
