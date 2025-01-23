@@ -164,7 +164,7 @@ module.exports = function(app) {
       }
     }
 
-    response.status(200).send(foundAlbum);
+    response.status(200).send(foundAlbum); // jhgjhgjh
   }
 
   app.get('/album/list', listAlbums); 
