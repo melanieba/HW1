@@ -1,7 +1,5 @@
 
 // duration is in minutes
-// tbd: is id okay for identifying which concert start time i wanna change
-// tbd: change typo on txt file
 let concerts = [
   { id: 1, startDate: new Date('2025-05-14'), duration: 120, primaryArtist: "artist4", otherArtists: ["a", "b", "c"] }, 
   { id: 2, startDate: new Date('2025-01-20'), duration: 180, primaryArtist: "artist5", otherArtists: ["d", "e"] }, 
@@ -10,7 +8,6 @@ let concerts = [
 
 module.exports = function(app) {
 
-  // List all concerts within a time range (minimum and maximum start time/date)
   function listConcerts(request, response) {
     const minStartDateInput = request.query.minStartDate;
     const maxStartDateInput = request.query.maxStartDate;

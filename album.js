@@ -1,15 +1,4 @@
 
-// /albums/tracks/
-// a route from album? 
-
-// or create actual objects? 
-// function Track(number, title, duration, primaryArtist) {
-//   this.number = number;
-//   this.title = title; 
-//   this.duration = duration;
-//   this.primaryArtist = primaryArtist;
-// }
-
 let albums = [
   { id: 1, name: "a1", yearReleased: 1970, genre: 'pop', tracks: [ { number: 1, title: "track1",  duration: 120, primaryArtist: "a1"}, 
   { number: 2, title: "track2",  duration: 100, primaryArtist: "a2"} ] }, 
@@ -74,7 +63,7 @@ module.exports = function(app) {
   }
 
   function deleteAlbum(request, response) {
-    let idInput = request.query.id;
+    let idInput = request.body.id;
 
     if (!idInput) {
       response.sendStatus(400);
@@ -99,7 +88,9 @@ module.exports = function(app) {
     response.status(200).send(foundAlbum);
   }
 
-  function listAlbumTracks(request, response) {
+  // track endpoints start here
+
+  function listTrackDetails(request, response) {
     let idInput = request.query.id;
 
     if (!idInput) {
@@ -157,14 +148,14 @@ module.exports = function(app) {
       return;
     }
 
-    for (let i = 0; i < foundAlbum.tracks.length; i++) { //tbd find where i didnt do ===
+    for (let i = 0; i < foundAlbum.tracks.length; i++) { 
       if (foundAlbum.tracks[i] === trackNumberInput) {
         albums.tracks.splice(i, 1);
         break;
       }
     }
 
-    response.status(200).send(foundAlbum); // jhgjhgjh
+    response.status(200).send(foundAlbum); 
   }
 
   app.get('/album/list', listAlbums); 
@@ -173,6 +164,6 @@ module.exports = function(app) {
   app.delete('/album/delete', deleteAlbum);
 
   app.post('/album/track/add', addAlbumTrack);
-  app.get('/album/track/list', listAlbumTracks);
+  app.get('/album/track/list', listTrackDetails);
   app.delete('/album/track/delete', deleteTrack);
 };
