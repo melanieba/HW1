@@ -35,9 +35,16 @@ module.exports = function(app) {
 
   function changeConcertStartDate(request, response) {
     let idInput = request.body.id;
+
+    const idToCheck = new Number(idInput);
+
+    if (isNaN(idToCheck)) {
+      response.sendStatus(400);
+      return;
+    }
     
     let foundConcert = concerts.find(concert => {
-      return concert.id = idInput;
+      return concert.id = idToCheck;
     });
     if (!foundConcert) {
       response.sendStatus(400); 
@@ -50,11 +57,6 @@ module.exports = function(app) {
     response.status(200).send(foundConcert);
   }
 
-  function listAllConcerts(request, response) {
-    response.status(200).send(concerts); 
-  }
-
   app.get('/concert/list', listConcerts);
   app.patch('/concert/update', changeConcertStartDate);
-  app.get('/concert/listAll', listAllConcerts);
 };

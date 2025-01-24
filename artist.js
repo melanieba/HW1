@@ -21,7 +21,7 @@ module.exports = function(app) {
     let socialMediaLinkInput = request.body.socialMediaLink; 
 
     // 2. validate inputs
-    if (!nameInput || !biographyInput) { // link optional?
+    if (!nameInput || !biographyInput) { // link optional
       response.sendStatus(400);
       return;
     }
@@ -66,5 +66,4 @@ module.exports = function(app) {
   app.get('/artist/list', listArtists);
   app.post('/artist/add', addArtist);
   app.patch('/artist/update', updateArtistProperty);
-
 };

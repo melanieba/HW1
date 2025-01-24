@@ -15,21 +15,20 @@ curl "http://localhost:3000/album/get?id=1"
 curl "http://localhost:3000/album/get?id=30"
 
 // delete
-curl -X DELETE "http://localhost:3000/album/delete?id=2"
+curl -X DELETE --data "id=2" "http://localhost:3000/album/delete" 
 
 
 
 // track
 
 // list 
-curl "http://localhost:3000/album/track/list?id=1"
-curl "http://localhost:3000/album/list?id=1"
+curl "http://localhost:3000/album/track/list?albumId=1" 
 
 // add track to album
-curl --data "albumId=1&number=10&title=t10&duration=90&primaryArtist=a10" http://localhost:3000/album/track/add
+curl --data "albumId=1&number=10&title=t10&duration=90&primaryArtist=a10" http://localhost:3000/album/track/add 
 
 // delete track
-curl -X PATCH --data "albumId=1&trackTitle=track1" http://localhost:3000/album/deleteTrack
+curl -X DELETE --data "albumId=1&trackNumber=1" http://localhost:3000/album/track/delete
 
 
 
@@ -49,7 +48,7 @@ curl -X PATCH --data "name=artist2&nameToChangeTo=ARTIST10" http://localhost:300
 // concert
 
 // list all for testing
-curl http://localhost:3000/concert/listAll
+curl "http://localhost:3000/concert/list?minStartDate=2000-01-01&maxStartDate=2050-01-01"
 
 // list valid concerts
 curl "http://localhost:3000/concert/list?minStartDate=2025-04-01&maxStartDate=2025-06-01"
