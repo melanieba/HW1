@@ -44,7 +44,7 @@ module.exports = function(app) {
     }
     
     let foundConcert = concerts.find(concert => {
-      return concert.id = idToCheck;
+      return concert.id == idToCheck;
     });
     if (!foundConcert) {
       response.sendStatus(400); 
